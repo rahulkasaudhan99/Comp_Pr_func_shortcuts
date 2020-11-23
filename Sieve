@@ -1,0 +1,27 @@
+    // C++ program all primes smaller than or equal to 
+    // n using Sieve of Eratosthenes 
+    
+    // pass a vector vll prm
+    vll prm;
+    void Sieve(ll n){
+        bool prime[n+1];
+    	memset(prime, true, sizeof(prime)); 
+    	for (ll p=2; p*p<=n; p++) { 
+    		if (prime[p] == true){ 
+    			for (ll i=p*p; i<=n; i += p) 
+    				prime[i] = false; 
+    		} 
+    	} 
+    	// store all prime numbers to vector prm  
+    	for (ll p=2; p<=n; p++){ 
+    	    if(prime[p]) prm.pb(p);
+        }  
+    } 
+
+/*
+    //simply you can call and use prm vector like this
+    Sieve(n);
+    ll len=prm.size();
+    rip(i,0,len) cout<<prm[i]<<" ";
+    cout<<endl;
+*/
