@@ -1,0 +1,20 @@
+// define a dp array and pass it to func
+// t=no of coins and an array of coins[] is passed
+// n= value of which we have to change 
+
+ll minCoins(ll n , ll coins[] , ll t , ll dp[]){
+    //base case
+    if(n==0) return 0;
+    //if a n is already computed
+    if(dp[n]!=0) return dp[n];
+    //recursive case compute only if dp[n] is not computed already
+    ll ans=INT_MAX;
+    for(ll i=0;i<t;i++){
+        if(n-coins[i]>=0){
+            int subprob=minCoins((n-coins[i]),coins,t,dp);
+            ans=min(ans,subprob+1);
+        }
+    }
+    dp[n]=ans;
+    return dp[n];
+}
