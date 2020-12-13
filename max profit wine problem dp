@@ -1,0 +1,14 @@
+// max profit by selling only one wine in a day from first or the last extreme pos given prices array of wines 
+//prices of each wines increses by price * y(th day)
+
+int winesProfit(int wines[] , int i , int j , int y ,int dp[][100]){
+    //base case
+    if(i>j) return 0;
+    //if max_profit is already computed
+    if(dp[i][j]!=0) return dp[i][j];
+    //recursive case compute only if dp[n] is not computed already
+    int op1= wines[i]*y + winesProfit(wines,i+1,j,y+1,dp);
+    int op2= wines[j]*y + winesProfit(wines,i,j-1,y+1,dp);
+    return dp[i][j] = max(op1,op2);
+    //return  max(op1,op2);
+}
