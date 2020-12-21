@@ -1,6 +1,6 @@
 // ladders problem one can take max k steps(if k=3 one can take 1 step or 2 step or 3 step) . Calculate no of ways to reach at the nth step (i.e at the top)
 //using DP
-int ladder(ll n,ll k,ll dp[]){
+ll ladderTD(ll n,ll k,ll dp[]){
     // base case
     if(n==0) return 1;
     // if it is already in dp array
@@ -8,10 +8,23 @@ int ladder(ll n,ll k,ll dp[]){
     // recursive case  
     ll ways =0;
     for(ll i=1;i<=k;i++){
-        if(n-i>=0) ways+= ladder(n-i,k,dp);
+        if(n-i>=0) ways+= ladderTD(n-i,k,dp);
     }
     return dp[n]=ways;
 }
+
+
+ll ladderBU(ll n,ll k){
+    ll dp[n+1]={0};
+    dp[0]=1;
+    for(ll i=1;i<=n;i++){
+        dp[i]=0;
+        for(ll j=1;j<=k;j++){
+            if(i-j>=0) dp[i]+=dp[i-j];
+        }
+    }
+    return dp[n];
+} 
 
 
 
