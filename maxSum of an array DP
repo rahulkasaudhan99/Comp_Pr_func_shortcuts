@@ -14,3 +14,18 @@ int maxSum(ll arr[],ll n){
     return maxxtn;
 }
 
+
+
+
+
+//With space complexity = O(1) 
+int maxSumSpace(ll arr[],ll n){
+    ll dp= arr[0]>0? arr[0]:0;
+    ll maxxtn=dp;
+    for(int i=0;i<n;i++){
+        dp=dp+arr[i];
+        if(dp<0) dp=0;
+        maxxtn=max(maxxtn,dp);
+    }
+    return maxxtn;
+}
