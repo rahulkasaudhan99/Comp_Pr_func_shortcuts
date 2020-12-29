@@ -1,0 +1,44 @@
+// factorial of big number
+
+#include<bits/stdc++.h>
+using namespace std;
+
+typedef long long ll;
+//passed n by reference so that value of n get increased 
+void multiply(int *arr,int &n ,int num){
+    int carry=0;
+    for(int i=0;i<n;i++){
+        int prod=(arr[i]*num)+carry;
+        arr[i]=prod%10;
+        carry=prod/10;
+    }
+    while(carry>0){
+        arr[n]=carry%10;
+        carry=carry/10;
+        n++;
+    }
+}
+
+void bigFactorial(int no){
+    int *arr=new int[1000];
+    for(int i=0;i<1000;i++) arr[i]=0;
+    arr[0]=1;
+    int n=1;
+    for(int i=2;i<=no;i++){
+        multiply(arr,n,i);
+    }
+    //print array
+    for(int i=n-1;i>=0;i--) cout<<arr[i];
+    cout<<endl;
+}
+
+
+int main() {
+	int no;
+    cin>>no;
+    bigFactorial(no);
+
+    cout<<"time taken : "<<(float)clock()/CLOCKS_PER_SEC<<" secs"<<endl; 
+	
+	return 0;
+}
