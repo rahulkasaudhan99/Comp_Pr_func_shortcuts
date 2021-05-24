@@ -1,0 +1,22 @@
+// To solve equation of type 
+// Ax + By = GCD(A,B)
+
+    ////////////////////////
+    //bottom up approach
+    int x,y,GCD;  //global var or can be passed as reference
+    void extendedEuclid(int a,int b){
+        // base case
+        if(b==0){
+            GCD=a,x=1,y=0;
+            return;
+        }
+        //recursive case
+        extendedEuclid(b,a%b);
+        int cX=y;
+        int cY=x-(a/b)*y;
+        
+        x=cX;
+        y=cY;
+        
+    }
+    ///////////////////////////////
