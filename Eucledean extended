@@ -1,5 +1,5 @@
   // Function for extended Euclidean Algorithm 
-  ll gcdExtended(ll a, ll b, ll *x, ll *y) { 
+  ll gcdExtended(ll a, ll b, ll &x, ll &y) { 
     //base
     if (a == 0) 
     { 
@@ -13,8 +13,8 @@
 
     // Update x and y using results of recursive call
     //  
-    *x = y1 - (b/a) * x1; 
-    *y = x1; 
+    x = y1 - (b/a) * x1; 
+    y = x1; 
 
     return gcd; 
   }
