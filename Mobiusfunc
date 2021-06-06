@@ -1,0 +1,29 @@
+// used in combinatorics 
+// used for inclusion exclusion principle
+// combination of unique prime factors
+// values are -1 0 and 1
+// -1 for odd no prime factors    (square free no)
+// 1 for even no of prime factors  (square free no)
+// 0 for non square free no i.e for any no prime factor p1^q1,p2^q2,... (where q1>1 or q2>1 or any q>1)
+ int N=100001;
+  vector<int> mobius(N);
+  vector<int> countpr(N);
+  vector<int> v(N,1);
+
+  void mobiusFunc(){
+      int i=0,j=0;
+      for(i=2;i<N;i++){
+          if(countpr[i]) continue;
+          for(j=i;j<N;j+=i){
+              countpr[j]++;
+              v[j]*=i;
+          }
+      }
+      for(int i=1;i<N;i++){
+          if(v[i]==i){
+              if(countpr[i]&1) mobius[i]=-1;
+              else mobius[i]=1;
+          }
+          else mobius[i]=0;
+      }
+  }
