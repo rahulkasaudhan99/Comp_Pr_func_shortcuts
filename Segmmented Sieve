@@ -1,1 +1,50 @@
 
+    vll pr;
+    vector<bool> prime(100001,true);
+    void Sieve(){
+        prime[1]=false;
+    	for (ll p=2; p*p<=100000; p++) { 
+    		if (prime[p] == true){ 
+    			for (ll i=p*p; i<=100000; i += p) 
+    				prime[i] = false; 
+    		} 
+    	} 
+    	for(int i=2;i<100000;i++){
+    	    // store all prime numbers to vector pr
+    		if(prime[i]){ 
+    		    pr.pb(i);
+    		}
+    	}
+    } 
+    
+    
+    int32_t main() {
+    
+        ios_base::sync_with_stdio(false);
+        cin.tie(NULL) ; cout.tie(NULL) ;
+         int t;
+         cin>>t;
+         Sieve();
+         while(t--){
+            ll n,m;
+            cin>>m>>n;
+            bool segment[n-m+1];
+            for(int i=0;i<n-m+1;i++) segment[i]=true;
+            for(auto x:pr){
+                if(x*x>n) break;
+                ll start=(m/x)*x;
+                if(x>=m && x<=n) start=x*2;
+                for(ll i=start;i<=n;i+=x){
+                    segment[i-m]=false;
+                }
+                
+            }
+            for(ll i=m;i<=n;i++){
+                if(segment[i-m]==true && i!=1) cout<<i<<endl;
+            }
+            
+            
+         }    
+        return 0 ;
+    
+    } 
