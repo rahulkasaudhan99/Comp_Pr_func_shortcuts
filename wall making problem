@@ -1,0 +1,18 @@
+/*
+suppose a wall of dimension 4*n and bricks of dimension 1*4 and 4*1
+return in how many ways we can build wall
+
+for n==0 or n==1 or n==1 or n==3 there is only one way and that is our base case
+for n>3 there is f(n-1)+f(n-3) ways
+*/
+
+int wallMaking(int n){
+    if(n<=3) return 1;
+    return wallMaking(n-1) + wallMaking(n-3);
+}
+
+int main() {
+    int n;
+    cin>>n;
+    cout<<wallMaking(n)<<endl;
+}
