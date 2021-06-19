@@ -1,0 +1,25 @@
+#include <bits/stdc++.h>
+using namespace std;
+char keypad[][10]={"","","ABC","DEF","GHI","JKL","MNO","PQRS","TUV","WXYZ"};
+void generateNames(char *output,char *input,int i,int j){
+    //base case
+    if(input[i]=='\0'){
+        output[j]='\0';
+        cout<<output<<endl;
+        return;
+    }
+    //rec case
+    int digit=input[i]-'0';
+    for(int k=0;keypad[digit][k]!='\0';k++){
+        output[j]=keypad[digit][k];
+        generateNames(output,input,i+1,j+1);
+    }
+}
+int main() {
+    int n;
+    cin>>n;
+    char input[100];
+    cin>>input;
+    char output[100];
+    generateNames(output,input,0,0);
+}
