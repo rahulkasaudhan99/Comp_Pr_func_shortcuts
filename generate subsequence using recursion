@@ -1,0 +1,22 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+void generateSubseq(char *input,char *output,int i,int j){
+    //base case
+    if(input[i]=='\0'){
+        output[j]='\0';
+        cout<<output<<endl;
+        return;
+    }
+    //recursive case
+    //include the curr char from output
+    output[j]=input[i];
+    generateSubseq(input,output,i+1,j+1);
+    //exclude curr char from output
+    generateSubseq(input,output,i+1,j);
+}
+int main() {
+    char input[]="abc";
+    char output[10];
+    generateSubseq(input,output,0,0);
+}
