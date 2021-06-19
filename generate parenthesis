@@ -1,0 +1,21 @@
+    vector<string> v;
+    void generatePar(char *output,int i,int n,int open,int close){
+        //base case
+        if(i==2*n){
+            output[i]='\0';
+            v.push_back(output);
+            //cout<<output<<endl;
+            return;
+        }
+        //recursive case
+        //include '(' to output
+        if(open<n){
+            output[i]='(';
+            generatePar(output,i+1,n,open+1,close);
+        }
+        //include ')' to output
+        if(open>close){
+            output[i]=')';
+            generatePar(output,i+1,n,open,close+1);
+        }
+    }
