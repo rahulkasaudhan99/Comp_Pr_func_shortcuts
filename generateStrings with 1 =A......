@@ -1,0 +1,35 @@
+// generate strings where 1=A , 2=B , 3=C and so on
+// given string 1234
+generated string possible AWD , LCD , ABCD
+
+
+#include <bits/stdc++.h>
+using namespace std;
+void generateStrings(char *input,char *output,int i,int j){
+    if(input[i]=='\0'){
+        output[j]='\0';
+        cout<<output<<endl;
+        return;
+    }
+    //return;
+    if( input[i+1]!='\0' && input[i]-'1'+1<=2 && input[i+1]-'1'+1<=6 ){
+        int tens=input[i]-'1'+1;
+        int ones=input[i+1]-'1'+1;
+        int no=tens*10+ones;
+        output[j]=no-1+'A';
+        generateStrings(input,output,i+2,j+1);
+    }
+    output[j]=input[i]-'1'+'A';
+    generateStrings(input,output,i+1,j+1);
+
+    return ;
+}
+
+int main() {
+    char input[100];
+    char output[100];
+    cin>>input;
+    generateStrings(input,output,0,0);
+
+    return 0;
+}
