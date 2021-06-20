@@ -1,0 +1,58 @@
+// if we want to generate unique permutation with lexicographically order just use set to store all permutations 
+// set<string> stl;
+#include <bits/stdc++.h>
+using namespace std;
+void permute(char *input,int i){
+    if(input[i]=='\0'){
+        //string t(input);
+        // push this t to set
+        cout<<input<<endl;
+        return;
+    }
+    for(int j=i;input[j]!='\0';j++){
+        swap(input[i],input[j]);
+        permute(input,i+1);
+        swap(input[i],input[j]);
+    }
+    return ;
+}
+
+int main() {
+    char input[100];
+    cin>>input;
+    permute(input,0);
+    return 0;
+}
+
+
+
+// no same permutation 
+// the key idea is check for index elemnt is not same to further iterating elements
+// and do not backtrack to get repeated permutation in case of repeated characters
+void permute(vector<int> input,int i,int n){
+    if(i==n){
+        for(int k=0;k<n;k++) cout<<input[k]<<" ";
+		cout<<endl;
+        return;
+    }
+    
+    for(int j=i;j<n;j++){
+        if(j==i or input[j]!=input[i]){
+			swap(input[i],input[j]);
+			permute(input,i+1,n);
+			                                                           /////////remove this backtracking step //swap(input[i],input[j]);
+		}
+    }
+    return ;
+}
+
+int32_t main() {
+	Fast_IO
+	int n;
+	cin>>n;
+	vector<int> input(n);
+    for(int i=0;i<n;i++) cin>>input[i];
+	sort(input.begin(),input.end());
+    permute(input,0,n);
+    return 0;
+}
