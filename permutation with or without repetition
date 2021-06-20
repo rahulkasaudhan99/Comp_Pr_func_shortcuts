@@ -29,6 +29,7 @@ int main() {
 // no same permutation 
 // the key idea is check for index elemnt is not same to further iterating elements
 // and do not backtrack to get repeated permutation in case of repeated characters
+// this will generate non repeated lexicographic order permutation
 void permute(vector<int> input,int i,int n){
     if(i==n){
         for(int k=0;k<n;k++) cout<<input[k]<<" ";
