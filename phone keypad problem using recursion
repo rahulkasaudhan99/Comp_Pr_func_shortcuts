@@ -16,8 +16,6 @@ void generateNames(char *output,char *input,int i,int j){
     }
 }
 int main() {
-    int n;
-    cin>>n;
     char input[100];
     cin>>input;
     char output[100];
