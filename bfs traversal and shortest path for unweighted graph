@@ -1,0 +1,103 @@
+// dfs traversal 
+// here we have used template so that we can pass nodes of any data type either char , int or string as per our need
+// which we will pass when initiating graph class mention the type of node  like Graph<int> g , Graph<char> g ....etc
+#include <bits/stdc++.h>
+using namespace std;
+template <typename T>
+class Graph{
+    map<T,list<T>> l;
+    public:
+        void addEdge(int x,int y){
+            l[x].push_back(y);
+            l[y].push_back(x);
+        }
+        
+        void bfs(T src){
+            map<T,bool> visited;
+            queue<T> q;
+            q.push(src);
+            visited[src]=true;
+            while(!q.empty()){
+                T node=q.front();
+                cout<<node<<"->";
+                q.pop();
+                for(int nbr:l[node]){
+                    if(!visited[nbr]){
+                        q.push(nbr);
+                        visited[nbr]=true;
+                    }
+                }
+            }
+            cout<<endl;
+        }
+};
+int main() {
+    
+    Graph<int> g;
+    g.addEdge(0,1);
+    g.addEdge(0,3);
+    g.addEdge(1,2);
+    g.addEdge(2,3);
+    g.addEdge(3,4);
+    g.addEdge(4,5);
+    g.bfs(0);
+}
+
+
+// minimum shortest path key idea is:: statement- BFS of any unweighted graph will always give shotest path from src to any node
+#include <bits/stdc++.h>
+using namespace std;
+template <typename T>
+class Graph{
+    map<T,list<T>> l;
+    public:
+        void addEdge(int x,int y){
+            l[x].push_back(y);
+            l[y].push_back(x);
+        }
+        
+        void bfs(T src){
+            map<T,int> dist;
+            //assign all others nodes dist = INT_MAX except src node
+            for(auto node_pairs:l){
+                T node=node_pairs.first;
+                dist[node]=INT_MAX;
+            }
+            dist[src]=0;
+            queue<T> q;
+            q.push(src);
+            while(!q.empty()){
+                T node=q.front();
+
+                q.pop();
+                for(int nbr:l[node]){
+                    //check if nbr is visited or not
+                    if(dist[nbr]==INT_MAX){
+                        q.push(nbr);
+                        //update the dist of nbr
+                        dist[nbr]=dist[node]+1;
+                    }
+                }
+            }
+            // print all distances from src node
+            for(auto node_pairs:l){
+                T node=node_pairs.first;
+                int d=dist[node];
+                cout<<"Dist of "<<node<<" from src: "<<d<<endl;
+            }
+        }
+};
+int main() {
+    
+    Graph<int> g;
+    g.addEdge(0,1);
+    g.addEdge(0,3);
+    g.addEdge(1,2);
+    g.addEdge(2,3);
+    g.addEdge(3,4);
+    g.addEdge(4,5);
+    g.bfs(0);
+}
+
+
+
