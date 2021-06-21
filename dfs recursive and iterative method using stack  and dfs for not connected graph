@@ -1,0 +1,109 @@
+
+#include <bits/stdc++.h>
+using namespace std;
+template <typename T>
+class Graph{
+    map<T,list<T>> l;
+    public:
+        void addEdge(int x,int y){
+            l[x].push_back(y);
+            l[y].push_back(x);
+        }
+
+        void dfsHelper(T src,map<T,bool> &visited){
+        // recursively traverse the graph
+            cout<<src<<" ";
+            visited[src]=true;
+            for(auto child:l[src]){
+            // if child of src is not visited mark visited check for child
+                if(!visited[child]){
+                    dfsHelper(child,visited);
+                }
+            }
+        }
+        void dfs(T src){
+            map<T,bool> visited;
+            // mark all the node as not visited before traversing
+            for(auto x:l){
+                T node=x.first;
+                visited[node]=false;
+            }
+            // call dfsHelper func
+            dfsHelper(src,visited);  
+        }
+};
+int main() {
+    
+    Graph<int> g;
+    g.addEdge(0,1);
+    g.addEdge(0,3);
+    g.addEdge(1,2);
+    g.addEdge(2,3);
+    g.addEdge(3,4);
+    g.addEdge(4,5);
+    g.dfs(0);
+}
+
+
+//iterative method using stack
+
+
+
+
+//find all connected component in graph
+
+#include <bits/stdc++.h>
+using namespace std;
+template <typename T>
+class Graph{
+    map<T,list<T>> l;
+    public:
+        void addEdge(int x,int y){
+            l[x].push_back(y);
+            l[y].push_back(x);
+        }
+
+        void dfsHelper(T src,map<T,bool> &visited){
+            cout<<src<<" ";
+            visited[src]=true;
+            for(auto child:l[src]){
+                if(!visited[child]){
+                    dfsHelper(child,visited);
+                }
+            }
+        }
+        //here we do not need src
+        void dfs(){
+            map<T,bool> visited;
+            for(auto x:l){
+                T node=x.first;
+                visited[node]=false;
+            }
+            int count=1;
+            for(auto x:l){
+                T node=x.first;
+                if(!visited[node]) {
+                    cout<<"Component "<<count<<" --> ";
+                    dfsHelper(node,visited);
+                    cout<<endl;
+                    count++;  
+                }
+            }
+            
+        }
+};
+int main() {
+    
+    Graph<int> g;
+    g.addEdge(0,1);
+    g.addEdge(0,3);
+    g.addEdge(1,2);
+    g.addEdge(2,4);
+    g.addEdge(3,4);
+    g.addEdge(4,5);
+    g.addEdge(6,7);
+    g.addEdge(7,8);
+    g.addEdge(9,10);
+    g.addEdge(11,11);
+    g.dfs();
+}
