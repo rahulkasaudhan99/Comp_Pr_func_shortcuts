@@ -1,4 +1,4 @@
-//using concept that a neighbour node of curr node is visited and nbr node is not the parent of curr node 
+//using concept that Cycle is present - If a neighbour node of curr node is visited and nbr node is not the parent of curr node 
 
 
 #include <bits/stdc++.h>
