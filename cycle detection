@@ -89,7 +89,7 @@ int main(){
 
 //in Directed Graph
 //using the concept of back edge add the node which is traversed and currently in the path and remove the nodes which is returned from current path
-//topological sort using BFS
+//and make them false in stackk array aor remove from map
 //key idea is to maintain two boolean array or map as per requirement 
 #include<bits/stdc++.h>
 using namespace std;
@@ -109,7 +109,7 @@ class Graph{
             visited[node]=true;
             stackk[node]=true;
             for(auto nbr:adj[node]){
-                if(stackk[nbr]) return true;
+                if(stackk[nbr]) return true;       //backedge found if vertex encountered already present in the array or map
                 else if(!visited[nbr]){
                     bool cycle_mila=cycleHelper(nbr,visited,stackk);
                     if(cycle_mila) return true;
