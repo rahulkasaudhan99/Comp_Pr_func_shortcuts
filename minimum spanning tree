@@ -1,0 +1,152 @@
+// Krushkal algo
+/*
+algorithm:
+1: sort all edges by its weight
+// pick one edge and add it to MST calculate the sum of that edge to final sum only if picking that edge doesnot forms cycle 
+*/
+//maintain rank of each set and attch smaller tree with the bigger tree
+#include<bits/stdc++.h>
+using namespace std;
+class DSU{
+    int *parent;
+    int *rank;
+    public:
+        DSU(int V){
+            parent=new int[V];
+            rank=new int[V];
+            for(int i=0;i<V;i++) {
+                parent[i]=-1;
+                rank[i]=1;
+            }
+        }
+        int find(int i){
+            if(parent[i]==-1) return i;
+            return parent[i]=find(parent[i]);
+        }
+        void unite(int u,int v){
+            int s1=find(u);
+            int s2=find(v);
+            if(s1!=s2) {
+                if(rank[s1]<rank[s2]) {
+                    parent[s1]=s2;
+                    rank[s2]+=rank[s1];
+                }
+                else {
+                    parent[s2]=s1;
+                    rank[s1]+=rank[s2];
+                }
+            }
+        }
+};
+class Graph{
+    int V;
+    vector<vector<int>> l;
+    public:
+        Graph(int v){
+            this->V=v;
+        }
+        void addEdge(int w,int u,int v){
+            l.push_back({w,u,v});
+        }
+        int krushkalMST(){
+            // main logic easy
+            // sort all edges acc to their weight
+            sort(l.begin(),l.end());
+            //intialize DSU set s
+            DSU s(V);
+            int ans=0;
+            for(auto edge:l){
+                int w=edge[0];
+                int x=edge[1];
+                int y=edge[2];
+                if(s.find(x)!=s.find(y)){
+                    s.unite(x,y);
+                    ans+=w;
+                }
+            }
+            return ans;
+        }
+};
+
+int main(){
+    int n,m;
+    cin>>n>>m;
+    Graph g(n);
+    for(int i=0;i<m;i++){
+        int u,v,w;
+        cin>>w>>u>>v;
+        g.addEdge(w,u,v);
+    }
+    cout<<g.krushkalMST()<<endl;
+    return 0;
+}
+
+// Prim's Algorithm
+#include<bits/stdc++.h>
+using namespace std;
+class Graph{
+    int V;
+    vector<pair<int,int>> *l;
+    public:
+        Graph(int v){
+            this->V=v;
+            l=new vector<pair<int,int>>[V];
+        }
+        void addEdge(int w,int u,int v){
+            l[u].push_back(make_pair(v,w));
+            l[v].push_back(make_pair(u,w));
+        }
+        int primsMST(){
+            int ans=0;
+            //most important thing is the min heap can be created using stl priority queue
+            priority_queue<pair<int,int>,vector<pair<int,int>>,greater<pair<int,int>>> Q;
+            bool *visited=new bool[V]{0};
+            //initially push {0,0} from src to src wt=0
+            Q.push({0,0});
+            while(!Q.empty()){
+                auto best=Q.top();
+                Q.pop();
+                int wt=best.first;
+                int to=best.second;
+                // if current edge to edge is visited discard it and continue
+                if(visited[to]) continue;
+                ans+=wt;
+                //add this vertices to MST and mark them visited i.e take the current edge
+                visited[to]=1;
+                //add new edges in the queue
+                for(auto x:l[to]){
+                    // if any nbr of vertices is not visited add this vertices to queue
+                    if(!visited[x.first]){
+                        Q.push({x.second,x.first});
+                    }
+
+                } 
+            }
+
+            return ans;
+        }
+};
+
+int main(){
+    int n,m;
+    cin>>n>>m;
+    Graph g(n);
+    for(int i=0;i<m;i++){
+        int u,v,w;
+        cin>>u>>v>>w;
+        g.addEdge(w,u-1,v-1);
+    }
+    cout<<g.primsMST()<<endl;
+    return 0;
+}
+
+/*
+Test Case
+4 5
+1 2 10
+2 3 15
+1 3 5
+4 2 2
+4 3 40
+output=17
+*/
