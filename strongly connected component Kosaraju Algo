@@ -1,0 +1,74 @@
+/*
+ DFS of a graph produces a single tree if all vertices are reachable from the DFS starting point. 
+ Otherwise DFS produces a forest. So DFS of a graph with only one SCC always produces a tree
+ if we do a DFS of graph and store vertices according to their finish times, we make sure that the finish time 
+ of a vertex that connects to other SCCs (other that its own SCC),
+ will always be greater than finish time of vertices in the other SCC 
+*/
+// Kosaraju's Algorithm
+//step1-Create an empty stack ‘S’ and do DFS traversal of a graph. In DFS traversal, 
+//after calling recursive DFS for adjacent vertices of a vertex, push the vertex to stack.
+//step 2 reverse the graph by reversing all edges
+//for each unvisited element in the stack(order top of stack) created do normal dfs on reverserd graph and print the nodes(also mark as unvisited)
+#include<bits/stdc++.h>
+using namespace std;
+void dfs(vector<int> graph[],int src,bool *visited,vector<int> & stack){
+    visited[src]=true;
+    for(auto nbr:graph[src]){
+        if(!visited[nbr]){
+            dfs(graph,nbr,visited,stack);
+        }
+    }
+    //pushing the returning element function call is complete here
+    stack.push_back(src);
+}
+void dfs2(vector<int> graph[],int src,bool *visited){
+    visited[src]=true;
+    cout<<src<<" ";
+    for(auto nbr:graph[src]){
+        if(!visited[nbr]){
+            dfs2(graph,nbr,visited);
+        }
+    }
+}
+void solve(int n,vector<int> graph[],vector<int> rev_graph[]){
+    bool visited[n];
+    memset(visited,0,n);
+    vector<int> stack;
+    // step1- needs to store vertices acc to their finish time
+    for(int i=0;i<n;i++){
+        if(!visited[i]) dfs(graph,i,visited,stack);
+    }
+    //ordering =stack 
+    //step2=reverse done already
+    //setp3=do dfs making src as per order in stack
+    //again reset vsisted array and process dfs on ech element from stack
+    memset(visited,0,n);
+    char connected_comp='A';
+    for(int i=stack.size()-1;i>=0;i--){
+        int node=stack[i];
+        if(!visited[node]){
+            cout<<"component "<<connected_comp<<" --> ";
+            dfs2(rev_graph,node,visited);
+            cout<<endl;
+            connected_comp++;
+        }
+    }
+}
+
+int main(){
+    int n,m;
+    cin>>n>>m;
+    vector<int> graph[n];
+    vector<int> rev_graph[n];
+    for(int i=0;i<m;i++){
+        int u,v;
+        cin>>u>>v;
+        //original graph
+        graph[u].push_back(v);
+        // created already a reverse graph
+        rev_graph[v].push_back(u); 
+    }
+    solve(n,graph,rev_graph);
+    return 0;
+}
