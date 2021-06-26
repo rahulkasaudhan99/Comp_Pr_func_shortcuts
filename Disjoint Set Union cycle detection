@@ -1,0 +1,128 @@
+// naive approach
+
+#include<bits/stdc++.h>
+using namespace std;
+
+class Graph{
+    int V;
+    list<pair<int,int>> l;
+    public:
+        Graph(int v){
+            this->V=v;
+        }
+        void addEdge(int u,int v){
+            l.push_back(make_pair(u,v));
+        }
+        int find(int i,int parent[]){
+            if(parent[i]==-1) return i;
+            return find(parent[i],parent);
+        }
+        void setUnion(int u,int v,int parent[]){
+            int s1=find(u,parent);
+            int s2=find(v,parent);
+            if(s1!=s2) parent[s2]=s1;                      // for path compression just change this line parent[i]=find(parent[i],parent);
+        }
+        bool isCycle(){
+            int *parent=new int[V];
+            for(int i=0;i<V;i++) parent[i]=-1;
+            //iterate over all edges and check
+            for(auto x:l){
+                int u=x.first;
+                int v=x.second;
+                int s1=find(u,parent);
+                int s2=find(v,parent);
+                if(s1!=s2) setUnion(s1,s2,parent);
+                else return true;
+            }
+            delete [] parent;
+            return false;
+        }
+};
+
+int main(){
+    int n,m;
+    cin>>n>>m;
+    Graph g(n);
+    for(int i=0;i<m;i++){
+        int u,v;
+        cin>>u>>v;
+        g.addEdge(u,v);
+    }
+    g.isCycle() ? cout<<"Cycle is found"<<endl : cout<<"Cycle is not found"<<endl;
+    return 0;
+}
+
+
+// path compression optimisation in find function in DSU
+// Union by Rank int DSU
+//if(s1!=s2) parent[s2]=s1;                      // for path compression just change this line parent[i]=find(parent[i],parent);
+
+//maintain rank of each set initially 1 for all vertices
+//Attch smaller tree with the bigger tree for better complexity
+//set s1 as parent of s2 if rank[s1]>rank[s2] and vice versa
+// also update rank of final parent node s1 in 1st and s2 in 2nd
+
+#include<bits/stdc++.h>
+using namespace std;
+
+class Graph{
+    int V;
+    list<pair<int,int>> l;
+    public:
+        Graph(int v){
+            this->V=v;
+        }
+        void addEdge(int u,int v){
+            l.push_back(make_pair(u,v));
+        }
+        int find(int i,int parent[]){
+            if(parent[i]==-1) return i;
+            return parent[i]=find(parent[i],parent);
+        }
+        void setUnion(int u,int v,int parent[],int rank[]){
+            int s1=find(u,parent);
+            int s2=find(v,parent);
+            if(s1!=s2) {
+                if(rank[s1]<rank[s2]) {
+                    parent[s1]=s2;
+                    rank[s2]+=rank[s1];
+                }
+                else {
+                    parent[s2]=s1;
+                    rank[s1]+=rank[s2];
+                }
+            }
+        }
+        bool isCycle(){
+            int *parent=new int[V];
+            int *rank=new int[V];
+            for(int i=0;i<V;i++) {
+                parent[i]=-1;
+                rank[i]=1;
+            }
+            //iterate over all edges and check
+            for(auto x:l){
+                int u=x.first;
+                int v=x.second;
+                int s1=find(u,parent);
+                int s2=find(v,parent);
+                if(s1!=s2) setUnion(s1,s2,parent,rank);
+                else return true;
+            }
+            delete [] parent;
+            return false;
+        }
+};
+
+int main(){
+    int n,m;
+    cin>>n>>m;
+    Graph g(n);
+    for(int i=0;i<m;i++){
+        int u,v;
+        cin>>u>>v;
+        g.addEdge(u,v);
+    }
+    g.isCycle() ? cout<<"Cycle is found"<<endl : cout<<"Cycle is not found"<<endl;
+    return 0;
+}
