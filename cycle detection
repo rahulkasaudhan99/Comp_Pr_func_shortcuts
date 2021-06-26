@@ -1,3 +1,4 @@
+//in undirected graph for all connected components of a graph
 //using concept that Cycle is present - If a neighbour node of curr node is visited and nbr node is not the parent of curr node 
 
 
@@ -86,3 +87,59 @@ int main(){
     return 0;
 }
 
+//in Directed Graph
+//using the concept of back edge add the node which is traversed and currently in the path and remove the nodes which is returned from current path
+//topological sort using BFS
+//key idea is to maintain two boolean array or map as per requirement 
+#include<bits/stdc++.h>
+using namespace std;
+class Graph{
+    int V;
+    list<int> *adj;
+    public:
+        Graph(int v){
+            this->V=v;
+            adj=new list<int>[V];
+        }
+        void addEdge(int u,int v){
+            //directed graph
+            adj[u].push_back(v);
+        }
+        bool cycleHelper(int node,bool *visited,bool *stackk){
+            visited[node]=true;
+            stackk[node]=true;
+            for(auto nbr:adj[node]){
+                if(stackk[nbr]) return true;
+                else if(!visited[nbr]){
+                    bool cycle_mila=cycleHelper(nbr,visited,stackk);
+                    if(cycle_mila) return true;
+                }
+            }
+            // returning point 
+            // removed from current path i.e leave a node from path
+            stackk[node]=false;
+            // no cycle foound
+            return false;
+        }
+        bool isCycle(){
+            bool *stackk=new bool[V]; //stack to check if this vertex is in path or not
+            bool *visited=new bool[V];
+            for(int i=0;i<V;i++) visited[i]=false;
+            for(int i=0;i<V;i++) stackk[i]=false;
+            return cycleHelper(0,visited,stackk);
+        }
+};
+
+int main(){
+    Graph g(7);
+	g.addEdge(0,1);
+	g.addEdge(1,2);
+	g.addEdge(2,3);
+	g.addEdge(3,4);
+	g.addEdge(4,5);
+	g.addEdge(1,5);
+    g.addEdge(5,6);
+    g.addEdge(4,2);  //backedge if we remove it it will give Cycle is not found
+    g.isCycle()? cout<<"Cycle is found"<<endl : cout<<"Cycle is not found"<<endl;
+    return 0;
+}
