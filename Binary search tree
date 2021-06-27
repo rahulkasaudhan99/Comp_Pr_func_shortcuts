@@ -1,0 +1,175 @@
+// insert operation delete operation and inorder preorder postorder traversal 
+#include <bits/stdc++.h>
+using namespace std;
+
+class TreeNode{
+    int data;
+    TreeNode *left;
+    TreeNode *right;
+    public:
+        //default constructor
+        TreeNode(){
+            data=0;
+            left=NULL;
+            right=NULL;
+        }
+        // parametrized constructor
+        TreeNode(int d){
+            data=d;
+            left=NULL;
+            right=NULL;
+        }
+        // insert operation in BST
+        TreeNode* insertBST(TreeNode* root,int key){
+            if(!root){
+                return new TreeNode(key);
+            }
+            if(key<root->data){
+                root->left=insertBST(root->left,key);
+            }
+            else{
+                root->right=insertBST(root->right,key);
+            }
+            return root;
+        }
+        // delete operation in BST
+        TreeNode* deleteBST(TreeNode* root,int key){
+            if(root==NULL) return root;
+            //search element to be deleted lies in left subtree
+            if(key<root->data){
+                root->left=deleteBST(root->left,key);
+                return root;
+            }
+            //search element to be deleted lies in right subtree
+            else if(key>root->data){
+                root->right=deleteBST(root->right,key);
+                return root;
+            }
+            //key==root->data element to be deleted is found
+            //check for three cases
+            // no child
+            if(root->left==NULL && root->right==NULL){
+                TreeNode* temp=root;
+                delete root;
+                return temp;
+            }
+            // one child
+            else if(root->left==NULL){
+                TreeNode* temp=root->right;
+                delete root;
+                return temp;
+            } 
+            else if(root->right==NULL){
+                TreeNode* temp=root->left;
+                delete root;
+                return temp;
+            }
+            /* 
+            we recursively call delete() for the successor. 
+            We can avoid recursive calls by keeping track of the parent node of 
+            the successor so that we can simply remove the successor by making 
+            the child of a parent NULL. We know that the successor would always be a leaf node.
+            */
+            //2 children 
+            //find inorder successor
+            // now root=node to be deleted i.e current node
+            else{
+                TreeNode *insuccparent=root;
+                TreeNode *insucc=root->right;
+                //find inorder successora
+                while(insucc->left!=NULL){
+                    insuccparent=insucc;
+                    insucc=insucc->left;
+                }
+                // Delete successor.  
+                //Since successor is always left child of its parent we can safely make
+                // successor's right child as left of its parent.
+                // If there is no succ, then assign succ->right to succParent->right
+                // means there is no left child exist for right child of current root
+                if(insuccparent!=root){ // succ exists
+                    insuccparent->left=insucc->right;
+                }
+                else{ 
+                //succ not exist i.e no child to the rt child of node to be deleted i.e current node
+                    insuccparent->right=insucc->right;
+                }
+                root->data=insucc->data;
+                delete insucc;
+                return root; 
+            }  
+             return root; 
+        }
+        //preorder traversal root->left->right
+        void preorder(TreeNode* root){
+            if(root==NULL) return;
+            cout<<root->data<<" ";
+            inorder(root->left);
+            inorder(root->right);
+        }
+        // inoreder traversal in bst
+        void inorder(TreeNode* root){
+            if(root==NULL) return;
+            inorder(root->left);
+            cout<<root->data<<" ";
+            inorder(root->right);
+        }
+        //postorder traversal left->right->root
+        void postorder(TreeNode* root){
+            if(root==NULL) return;
+            inorder(root->left);
+            inorder(root->right);
+            cout<<root->data<<" ";
+        }
+        //levelorder traversal left->right->root
+        void levelorder(TreeNode* root){
+            if(root==NULL) return;
+            queue<TreeNode *> q;
+            q.push(root);
+            while(!q.empty()){
+                TreeNode * node=q.front();
+                cout<<node->data<<" ";
+                q.pop();
+                //now push left child and then right respectively
+                if(node->left!=NULL) q.push(node->left);
+                if(node->right!=NULL) q.push(node->right);
+
+            }
+        }
+};
+
+int main(){
+    TreeNode t, *root=NULL;
+    int n;
+    cin>>n;
+    for(int i=0;i<n;i++){
+        int key;
+        cin>>key;
+        root=t.insertBST(root,key);
+    }
+    t.inorder(root);
+    cout<<endl;
+    t.preorder(root);
+    cout<<endl;
+    t.postorder(root);
+    cout<<endl;
+    t.deleteBST(root,50);
+    t.inorder(root);
+    cout<<endl;
+    t.deleteBST(root,40);
+    t.inorder(root);
+    cout<<endl;
+    t.deleteBST(root,30);
+    t.inorder(root);
+    cout<<endl;
+    return 0;
+}
+
+using queue ds simply BFS logic
+printLevelorder(tree)
+1) Create an empty queue q
+2) temp_node = root /*start from root*/
+3) Loop while temp_node is not NULL
+    a) print temp_node->data.
+    b) Enqueue temp_node’s children 
+      (first left then right children) to q
+    c) Dequeue a node from q.
