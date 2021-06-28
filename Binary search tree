@@ -103,8 +103,8 @@ class TreeNode{
         void preorder(TreeNode* root){
             if(root==NULL) return;
             cout<<root->data<<" ";
-            inorder(root->left);
-            inorder(root->right);
+            preorder(root->left);
+            preorder(root->right);
         }
         // inoreder traversal in bst
         void inorder(TreeNode* root){
@@ -116,8 +116,8 @@ class TreeNode{
         //postorder traversal left->right->root
         void postorder(TreeNode* root){
             if(root==NULL) return;
-            inorder(root->left);
-            inorder(root->right);
+            postorder(root->left);
+            postorder(root->right);
             cout<<root->data<<" ";
         }
         //levelorder traversal left->right->root
@@ -173,3 +173,134 @@ printLevelorder(tree)
     b) Enqueue temp_node’s children 
       (first left then right children) to q
     c) Dequeue a node from q.
+
+
+
+
+//preorder and postorder to BST
+#include <bits/stdc++.h>
+using namespace std;
+
+class TreeNode{
+    int data;
+    TreeNode *left;
+    TreeNode *right;
+    public:
+        //default constructor
+        TreeNode(){
+            data=0;
+            left=NULL;
+            right=NULL;
+        }
+        // parametrized constructor
+        TreeNode(int d){
+            data=d;
+            left=NULL;
+            right=NULL;
+        }
+        //preorder traversal root->left->right
+        void preorder(TreeNode* root){
+            if(root==NULL) return;
+            cout<<root->data<<" ";
+            preorder(root->left);
+            preorder(root->right);
+        }
+        // inoreder traversal in bst
+        void inorder(TreeNode* root){
+            if(root==NULL) return;
+            inorder(root->left);
+            cout<<root->data<<" ";
+            inorder(root->right);
+        }
+        //postorder traversal left->right->root
+        void postorder(TreeNode* root){
+            if(root==NULL) return;
+            postorder(root->left);
+            postorder(root->right);
+            cout<<root->data<<" ";
+        }
+        TreeNode * constructPreBSTHelper(int pre[],int &preind,int low,int high,int &size){
+            // base case
+            if(preind>=size || low>high) return NULL;
+            //allocate memory for the root og the subtree or tree 
+            TreeNode * root=new TreeNode(pre[preind]);
+            preind++;
+            // if tree has only one element
+            if(low==high) return root;
+            //find the just greater element than the root element in the pre array
+            int i;
+            for(i=low;i<=high;i++){
+                if(pre[i]>root->data) break;
+            }
+            //recursively form left subtree
+            root->left=constructPreBSTHelper(pre,preind,low+1,i-1,size);
+            //recursively form right subtree
+            root->right=constructPreBSTHelper(pre,i,i,high,size);
+            return root;
+        }
+
+        TreeNode* constructPreBST(int pre[],int &size){
+            int preind=0;
+            return constructPreBSTHelper(pre,preind,0,size-1,size);
+        }  
+        TreeNode * constructPostBSTHelper(int post[],int &postind,int low,int high,int &size){
+            // base case
+            cout<<postind<<" "<<low<<" "<<high<<endl;
+            if(postind<0 || low>high) return NULL;
+            //allocate memory for the root og the subtree or tree 
+            TreeNode * root=new TreeNode(post[postind]);
+            postind--;
+            cout<<root->data<<endl;
+            // if tree has only one element
+            if(low==high) return root;
+            //find the just greater element than the root element in the pre array
+            int i;
+            for(i=high;i>=low;i--){
+                if(post[i]<root->data) break;
+            }
+            //recursively form left subtree
+            cout<<i<<endl;
+            root->left=constructPostBSTHelper(post,i,low,i,size);
+            //recursively form right subtree
+            cout<<i<<endl;
+            root->right=constructPostBSTHelper(post,postind,i+1,postind-1,size);
+            return root;
+        }
+
+        TreeNode* constructPostBST(int post[],int &size){
+            int postind=size-1;
+            return constructPostBSTHelper(post,postind,0,size-2,size);
+        }       
+};
+
+int main(){
+    TreeNode t, *root=NULL;
+    int n;
+    cin>>n;
+    int pre[n];
+    for(int i=0;i<n;i++){
+        cin>>pre[i];
+    }
+    root=t.constructPreBST(pre,n);
+    t.inorder(root);
+    cout<<endl;
+    t.preorder(root);
+    cout<<endl;
+    t.postorder(root);
+    cout<<endl;
+    int m;
+    cin>>m;
+    int post[m];
+    for(int i=0;i<m;i++){
+        cin>>post[i];
+    }
+    TreeNode* root2=NULL;
+    root2=t.constructPostBST(post,n);
+    t.inorder(root2);
+    cout<<endl;
+    t.preorder(root2);
+    cout<<endl;
+    t.postorder(root2);
+    cout<<endl;
+    return 0;
+}
