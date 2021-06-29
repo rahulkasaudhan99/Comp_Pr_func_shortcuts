@@ -178,6 +178,7 @@ printLevelorder(tree)
 
 
 //preorder and postorder to BST
+//preorder and postorder to BST
 #include <bits/stdc++.h>
 using namespace std;
 
@@ -245,12 +246,12 @@ class TreeNode{
         }  
         TreeNode * constructPostBSTHelper(int post[],int &postind,int low,int high,int &size){
             // base case
-            cout<<postind<<" "<<low<<" "<<high<<endl;
+            //cout<<postind<<" "<<low<<" "<<high<<endl;
             if(postind<0 || low>high) return NULL;
             //allocate memory for the root og the subtree or tree 
             TreeNode * root=new TreeNode(post[postind]);
             postind--;
-            cout<<root->data<<endl;
+            //cout<<root->data<<endl;
             // if tree has only one element
             if(low==high) return root;
             //find the just greater element than the root element in the pre array
@@ -258,12 +259,11 @@ class TreeNode{
             for(i=high;i>=low;i--){
                 if(post[i]<root->data) break;
             }
-            //recursively form left subtree
-            cout<<i<<endl;
-            root->left=constructPostBSTHelper(post,i,low,i,size);
             //recursively form right subtree
-            cout<<i<<endl;
-            root->right=constructPostBSTHelper(post,postind,i+1,postind-1,size);
+            root->right=constructPostBSTHelper(post,postind,i+1,postind,size);
+            //recursively form left subtree
+            root->left=constructPostBSTHelper(post,i,low,i,size);
+            
             return root;
         }
 
@@ -304,3 +304,11 @@ int main(){
     cout<<endl;
     return 0;
 }
+/*output
+1 5 7 10 40 50 
+10 5 1 7 40 50 
+1 7 5 50 40 10 
+1 5 7 10 40 50 
+10 5 1 7 40 50 
+1 7 5 50 40 10 
+*/
