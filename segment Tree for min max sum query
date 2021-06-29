@@ -1,0 +1,85 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+int query(int *tree,int s,int e,int qs,int qe,int index){
+    //base case complete overlap case
+    if(s>=qs && e<=qe){
+        return tree[index];    
+    }
+    // no overlap
+    if(e<qs || s>qe ){
+        return INT_MAX;
+    }
+    
+    //partial overlap
+    int mid=(s+e)/2;
+    int left=query(tree,s,mid,qs,qe,2*index);
+    int right=query(tree,mid+1,e,qs,qe,2*index+1);
+    
+    return min(left,right);
+}
+void update(int *tree,int s,int e,int i,int increment,int index){
+    //if I is out of bound or range
+    if(i>e || i<s) return;
+    //base case when i is found
+    if(s==e) {
+        tree[index]+=increment;
+        return;
+    }
+    //recursive case for left and right
+    int mid=(s+e)/2;
+    update(tree,s,mid,i,increment,2*index);
+    update(tree,mid+1,e,i,increment,2*index+1);
+    tree[index]=min(tree[2*index],tree[2*index+1]);
+    return;
+}
+query for update a range from l to r
+void updateRange(int *tree,int s,int e,int l,int r,int increment,int index){
+    //if I is out of bound or range
+    if(l>s || r<s) return;
+    //base case when i is found
+    if(s==e) {
+        tree[index]+=increment;
+        return;
+    }
+    //recursive case for left and right
+    int mid=(s+e)/2;
+    updateRange(tree,s,mid,l,r,increment,2*index);
+    updateRange(tree,mid+1,e,l,r,increment,2*index+1);
+    tree[index]=min(tree[2*index],tree[2*index+1]);
+    return;
+}
+
+void build(int *a,int *tree,int s,int e,int index){
+    // base case for leaf
+    if(s==e) {
+        tree[index]=a[s];
+        return;
+    }
+    //recursive case for left an right subtree
+    int mid=(s+e)/2;
+    build(a,tree,s,mid,2*index);
+    build(a,tree,mid+1,e,2*index+1);
+    tree[index]=min(tree[2*index],tree[2*index+1]);
+    return;
+    
+}
+
+
+
+int main(){
+    int a[]={1,3,2,-5,6,4};
+    int n=sizeof(a)/sizeof(a[0]);
+    int *tree=new int[4*n+1];
+    build(a,tree,0,n-1,1);
+    for(int i=1;i<=13;i++) cout<<tree[i]<<" ";
+    cout<<endl;
+    cout<<query(tree,0,n-1,2,4,1)<<endl;
+    cout<<query(tree,0,n-1,4,4,1)<<endl;
+    cout<<query(tree,0,n-1,2,5,1)<<endl;
+    cout<<query(tree,0,n-1,0,2,1)<<endl;
+    update(tree,0,n-1,3,10,1);
+    cout<<query(tree,0,n-1,0,2,1)<<endl;
+    cout<<query(tree,0,n-1,4,5,1)<<endl;
+    return 0;
+}
