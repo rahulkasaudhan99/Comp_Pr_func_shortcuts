@@ -117,7 +117,7 @@ using namespace std;
  };
 
 int main(){
-    AVLtree t,*root;
+    AVLtree t,*root=NULL;
     root=t.insert(root,20);
     root=t.insert(root,25);
     root=t.insert(root,30);
