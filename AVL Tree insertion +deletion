@@ -1,0 +1,133 @@
+Implementation 
+Following is the implementation for AVL Tree Insertion. The following implementation uses the recursive BST insert to 
+insert a new node. In the recursive BST insert, after insertion, we get pointers to all ancestors one by one in a bottom-up manner.
+So we don’t need parent pointer to travel up. The recursive code itself travels up and visits all the ancestors of the newly inserted node. 
+1) Perform the normal BST insertion. 
+2) The current node must be one of the ancestors of the newly inserted node. Update the height of the current node. 
+3) Get the balance factor (left subtree height – right subtree height) of the current node. 
+4) If balance factor is greater than 1, then the current node is unbalanced and we are either in Left Left case or left Right case. 
+To check whether it is left left case or not, compare the newly inserted key with the key in left subtree root. 
+5) If balance factor is less than -1, then the current node is unbalanced and we are either in Right Right case or Right-Left case. 
+To check whether it is Right Right case or not, compare the newly inserted key with the key in right subtree root. 
+
+#include <bits/stdc++.h>
+using namespace std;
+ class AVLtree{
+     int data;
+     int height;
+     AVLtree *left;
+     AVLtree *right;
+     public:
+        AVLtree(){
+            data=0;
+            height=1;
+            left=NULL;
+            right=NULL;
+        }
+        AVLtree(int key){
+            data=key;
+            left=NULL;
+            right=NULL;
+            height=1;
+        }
+
+
+        int Height(AVLtree*node){
+            if(node==NULL) return 0;
+            return node->height;
+        }
+        
+        int balanceFactor(AVLtree *node){
+            if(node==NULL) return 0;
+            return (Height(node->left) - Height(node->right));
+        }
+        AVLtree* leftRotate(AVLtree *node){
+            //capturing values
+            AVLtree *b=node->right;
+            AVLtree *T3=b->left;
+            //rotating nodes assign values
+            b->left=node;
+            node->right=T3;
+            //update height 1st update c's i.e node height then b bcoz b's height is dependent on c's height
+            node->height=max(Height(node->left),Height(node->right))+1;
+            b->height=max(Height(b->left),Height(b->right))+1;
+            return b;
+        }
+        AVLtree* rightRotate(AVLtree *node){
+            //capturing values
+            AVLtree *b=node->left;
+            AVLtree *T3=b->right;
+            //rotating nodes assign values
+            b->right=node;
+            node->left=T3;
+            //update height 1st update c's i.e node height then b bcoz b's height is dependent on c's height
+            node->height=max(Height(node->left),Height(node->right))+1;
+            b->height=max(Height(b->left),Height(b->right))+1;
+            return b;
+        }
+        AVLtree* insert(AVLtree *root,int d){
+            //base case if there is no node or root is NULL
+            if(root==NULL) return new AVLtree(d);
+
+            if(d>root->data){
+                root->right=insert(root->right,d);
+            }
+            else if(d<root->data){
+                root->left=insert(root->left,d);
+            }
+            else return root;
+            //updation of height
+            root->height=max(Height(root->left),Height(root->right))+1;
+            //check for balance factor
+            int bf=balanceFactor(root);
+            //4 cases will be there 
+            //case 1 LL Problem solved by RR rotation
+            if(bf>1 && d<root->left->data){
+                return rightRotate(root);
+            }
+            // case 2 RR Problem solved by LL rotation 
+            if(bf<-1 && d>root->right->data){
+                return leftRotate(root);
+            }
+            // case 3 LR Probem solved by LR rotation
+            if(bf>1 && d>root->left->data){
+                root->left=leftRotate(root->left);
+                return rightRotate(root);
+            }
+            // case 4 RL Probem solved by RL rotation
+            if(bf<-1 && d<root->right->data){
+                root->right=rightRotate(root->right);
+                return leftRotate(root);
+            }
+            return root;
+        }
+
+        void display(AVLtree *root){
+            if(root==NULL) return;
+            if(root->left==NULL) cout<<'.';
+            else cout<<root->left->data;
+
+            cout<<" => "<<root->data<<" <= ";
+            if(root->right==NULL) cout<<'.';
+            else cout<<root->right->data;
+            cout<<endl;
+            display(root->left);
+            display(root->right);
+        }
+ };
+
+int main(){
+    AVLtree t,*root;
+    root=t.insert(root,20);
+    root=t.insert(root,25);
+    root=t.insert(root,30);
+    root=t.insert(root,10);
+    root=t.insert(root,5);
+    root=t.insert(root,15);
+    root=t.insert(root,27);
+    root=t.insert(root,19);
+    
+    t.display(root);
+
+    return 0;
+}
