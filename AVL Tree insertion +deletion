@@ -101,7 +101,7 @@ using namespace std;
             }
             return root;
         }
-        // to get the inorderv successor
+       // to get the inorderv successor
         AVLtree * inordersucc(AVLtree* node) { 
             AVLtree* current = node; 
             /* loop down to find the leftmost leaf */
@@ -109,8 +109,8 @@ using namespace std;
                 current = current->left; 
             return current; 
         } 
-        // STEP 1: PERFORM STANDARD BST DELETE 
-        AVLtree* deleteNode(AVLtree* root, int key) { 
+       // STEP 1: PERFORM STANDARD BST DELETE 
+       AVLtree* deleteNode(AVLtree* root, int key) { 
             if (root == NULL) return root; 
             //If key to be deleted < root's key, then it lies in left subtree 
             if ( key < root->data ) 
@@ -120,29 +120,24 @@ using namespace std;
                 root->right = deleteNode(root->right, key); 
             // if key is same as root's key,then This is the node to be deleted 
             else{ 
-                // node with only one child or no child 
-                if(root->left == NULL){
-                    AVLtree *temp = root->right; 
-                    // No child case 
-                    if (temp == NULL) { 
-                        temp = root; 
-                        root = NULL; 
-                    } 
-                    // One child case Copy contents of the non-empty child 
-                    else  *root = *temp;
-                    free(temp);
+                
+                // no child
+                if(root->left==NULL && root->right==NULL){
+                    AVLtree* temp=root;
+                    delete root;
+                    return temp;
+                }
+                // one child
+                else if(root->left==NULL){
+                    AVLtree* temp=root->right;
+                    delete root;
+                    return temp;
                 } 
-                if(root->right == NULL ) { 
-                    AVLtree *temp = root->left; 
-                    // No child case 
-                    if (temp == NULL) { 
-                        temp = root; 
-                        root = NULL; 
-                    } 
-                    // One child case Copy contents of the non-empty child 
-                    else  *root = *temp;
-                    free(temp); 
-                } 
+                else if(root->right==NULL){
+                    AVLtree* temp=root->left;
+                    delete root;
+                    return temp;
+                }
                 else{ 
                     // node with two children: Get the inorder 
                     // successor (smallest in the right subtree) 
@@ -164,26 +159,26 @@ using namespace std;
             int bf=balanceFactor(root);
             //4 cases will be there 
             //case 1 LL Problem solved by RR rotation
-            if(bf>1 && key<root->left->data){
+            if(bf>1 && balanceFactor(root->left) >= 0){
                 return rightRotate(root);
             }
             // case 2 RR Problem solved by LL rotation 
-            if(bf<-1 && key>root->right->data){
+            if(bf<-1 && balanceFactor(root->right) <= 0){
                 return leftRotate(root);
             }
             // case 3 LR Probem solved by LR rotation
-            if(bf>1 && key>root->left->data){
+            if(bf>1 && balanceFactor(root->left) < 0){
                 root->left=leftRotate(root->left);
                 return rightRotate(root);
             }
             // case 4 RL Probem solved by RL rotation
-            if(bf<-1 && key<root->right->data){
+            if(bf<-1 && balanceFactor(root->right) > 0){
                 root->right=rightRotate(root->right);
                 return leftRotate(root);
             }
             return root;
         }
-
+        
         void display(AVLtree *root){
             if(root==NULL) return;
             if(root->left==NULL) cout<<'.';
