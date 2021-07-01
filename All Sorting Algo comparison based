@@ -1,0 +1,95 @@
+// aLL Comparison Based sort Except merge and Quick (based on D&C)
+
+#include<bits/stdc++.h>
+using namespace std;
+
+///////////////////////////////
+void heapify(int *a,int n,int i){
+    //Here left and right subtree of heap is already a heap
+    //and we have to re heapify due to root only recursively
+    int largest=i; //initialise largest as root
+    int left=2*i+1; //left child
+    int right=2*i+2; //right child
+    //here base case is that i means largest must be less than n(size of arr)
+    if(left<n && a[left]>a[largest]) largest=left;
+    if(right<n && a[right]>a[largest]) largest=right;
+    if(largest!=i){   //if largest not changed then no swap 
+        swap(a[i],a[largest]); 
+        //heapify recursively for disturbed subtree
+        heapify(a,n,largest);
+    }
+    
+}
+
+//using max heap
+void heapSort(int *a,int n){
+    //internal node 0 to floor(n/2)-1
+    //rest floor(n/2) to n-1 indexes are all leaf nodes
+    //consider all leaf elements are already a min or max heap
+    //build heap starting from floor(n/2)-1 to 0
+    for(int i=n/2-1;i>=0;i--){
+        heapify(a,n,i);
+    }
+    
+    //sort by extracting max and exchanging it to end of heapify
+    //one by one extract an element from heap and 
+    for(int i=n-1;i>0;i--){ //upto 1 first element will be already sorted
+        swap(a[0],a[i]);
+        
+        // re heapify disturbed heap size reduced to i now
+        heapify(a,i,0);
+    }
+}
+
+
+
+/////////////////////////////////////////////
+void selectionSort(int *a,int n){
+    // less swap Required than merge and insertion sort
+    for(int i=0;i<n-1;i++){
+        int min_index=i;
+        for(int j=i;j<n;j++){
+            if(a[min_index]>a[j]) min_index=j;
+        }
+        if(min_index!=i) swap(a[i],a[min_index]);
+    }
+    return;
+}
+
+/////////////////////////////////////////////
+void insertionSort(int *a,int n){
+    //assume first element is already sorted
+    for(int i=1;i<n;i++){
+        int key=a[i];
+        int j=i-1;
+        while(j>=0 && a[j]>key){
+            a[j+1]=a[j];
+            j--;
+        }
+        a[j+1]=key;
+    }
+}
+
+//////////////////////////////////////////////
+void bubbleSort(int a[],int n){
+    for(int i=0;i<n;i++){
+        for(int j=i+1;j<n;j++){
+            if(a[j]<a[i]) swap(a[i],a[j]);
+        }
+    }
+    return;
+}
+////////////////////////////////////////
+
+int main(){
+    int n;
+    cin>>n;
+    int a[n];
+    for(int i=0;i<n;i++) cin>>a[i];
+    //bubbleSort(a,n);
+    //nsertionSort(a,n);
+    //selectionSort(a,n);
+    heapSort(a,n);
+    for(int i=0;i<n;i++) cout<<a[i]<<" ";
+    cout<<endl;
+}
