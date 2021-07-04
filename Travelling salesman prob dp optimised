@@ -1,0 +1,43 @@
+//using bitmasking and DP to reduce complexity from n! to (n-1) then finally with dp to complexity of O(n^2 * 2^n )
+#include<bits/stdc++.h>
+using namespace std;
+int visited_all;
+const int n=4;
+int tsp(vector<vector<int>> &dist,int mask,int pos,vector<vector<int>> &dp){
+    // base case if all city visited then return dist from starting city
+    //and curr city (to return back)
+    if(mask==visited_all){
+        return dist[pos][0];
+    }
+    //lookup in dp array
+    if(dp[mask][pos]!=-1) return dp[mask][pos];
+    int ans=INT_MAX;
+    // try to go to unvisited city
+    for(int city=0;city<n;city++){
+        if((mask&(1<<city))==0){
+            //let mask=1100 & 0010 will give 0000 we check for 3rd city
+            //mask= 1100|0010 will 1110 i.e current city is now visited
+            int newans=dist[pos][city]+tsp(dist,(mask|(1<<city)),city,dp);
+            ans=min(ans,newans);
+        }
+    }
+    return dp[mask][pos]=ans;
+}
+
+int main(){
+    vector<vector<int>> dist={
+        { 0, 10, 15, 20 },
+        { 10, 0, 35, 25 },
+        { 15, 35, 0, 30 },
+        { 20, 25, 30, 0 }
+    };
+    //we can store for a current position and current mask(like visited arr)
+    //mask can take values upto 2^n (0 to 2**n-1) and pos upto n
+    //pass a dp array of size dp[mask][pos] i.e dp[2**n-1][n];
+    int r=pow(2,n);
+    vector<vector<int>> dp(r,vector<int> (n,-1));
+    visited_all=(1<<n)-1;
+    int mask=1;
+    cout<<tsp(dist,mask,0,dp)<<endl;
+    return 0;
+}
