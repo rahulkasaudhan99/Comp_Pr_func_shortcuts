@@ -1,0 +1,149 @@
+//linked list reverse pushFront pushBack
+//linked list reverse
+//linked list mid element
+//linked list sort using merge sort
+//merge sort can be implemented as in place sort for linked list
+// To detect Loop use tortoise hare method
+//if slow and fast meet then cycle is present Floyd's cycle finding algo
+#include<bits/stdc++.h>
+using namespace std;
+
+class List{
+    int val;
+    List *next;
+    public:
+    List(){
+        val=0;
+        next=NULL;
+    }
+    List(int v){
+        this->val=v;
+        next=NULL;
+    }
+    //push front
+    List* pushFront(int v,List* head){
+        List *temp=new List(v);
+        temp->next=head;
+        head=temp;
+        return head;
+    }
+    //pushBack
+    List* pushBack(int v,List* head){
+        List *temp=new List(v);
+        if(head==NULL) return temp;
+        List* h=head;
+        while(h->next!=NULL){
+            h=h->next;
+        }
+        h->next=temp;
+        return head;
+    }
+    //reverse List
+    // h->1->2->3->4->5->NULL
+    //basically 3 steps involved and 4 line code
+    List* reverse(List* head){
+        List* current=head;
+        List* next=NULL;
+        List* prev=NULL;
+        while(current!=NULL){
+            //step 1 store next node
+            next=current->next;
+            //step 2 reverse current node pointer
+            current->next=prev;
+            //step 3 move prev and current pointer by one pos
+            prev=current;
+            current=next;
+        }
+        head=prev;
+        return head;
+    }
+    //tortoise hare method fast slow to find mid
+    List* midElement(List *head){
+        //if(head==NULL) return head;
+        List* slow=head,*fast=head->next;
+        while(fast && fast->next){
+            slow=slow->next;
+            fast=fast->next->next;
+        }
+        //cout<<slow->val<<endl;
+        return slow;
+    }
+    void printList(List *head){
+        List* temp=head;
+        while(temp){
+            cout<<temp->val<<" -> ";
+            temp=temp->next;
+        }
+        cout<<endl;
+    }
+    //////////////////////////////////////////
+    // merge two smaller List
+    List* merge(List *h1,List *h2){
+        
+        // base case
+        if(h1==NULL) return (h2);
+        if(h2==NULL) return (h1);
+        List *res;
+        //pich the smallest of first element of both list
+        // recur for remining
+        if(h1->val<=h2->val) {
+            res=h1;
+            res->next=merge(h1->next,h2);
+        }
+        else {
+            res=h2;
+            res->next=merge(h1,h2->next);
+        }
+        return res;
+    }
+    //Merge sort
+    List* mergeSort(List *head){
+        //base case
+        if(head==NULL || head->next==NULL) return head;
+        //find the mid element
+        List* mid=midElement(head);
+        List* h2=mid->next,*h1=head;
+        mid->next=NULL;
+        //break list from the mid into two parts
+        h1=mergeSort(h1);
+        h2=mergeSort(h2);
+        //recursively merge both sublists
+        return merge(h1,h2);
+    }
+    //////////////////////////////////
+    bool isCycle(List* head){
+        List* slow=head;
+        List* fast=head->next;
+        while(fast and fast->next){
+            slow=slow->next;
+            fast=fast->next->next;
+            if(slow==fast) break;
+        }
+        return slow==fast;
+    }
+};
+
+
+int main(){
+    int n;
+    cin>>n;
+    List L;
+    List *head=NULL;
+    for(int i=0;i<n;i++){
+        int v;
+        cin>>v;
+        head=L.pushBack(v,head);
+    }
+    L.printList(head);
+    head=L.reverse(head);
+    cout<<"reversed list : ";
+    L.printList(head);
+    //cout<<"mid element is : "<<endl;
+    //List* mid=L.midElement(head);
+    head=L.mergeSort(head);
+    cout<<"sorted list : ";
+    L.printList(head);
+    L.isCycle(head)?
+        cout<<"Cycle is present"<<endl : cout<<"not present"<<endl;
+    return 0;    
+}
