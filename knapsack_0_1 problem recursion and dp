@@ -42,7 +42,7 @@ int main(){
     vector<vector<int>> dp(n,vector<int>(W+1,-1));
     cout<<knapsackMem(val,wt,n-1,W,dp)<<endl;
     cout<<knapsackTab(val,wt,W,n)<<endl;
-    
+    //output=220
     return 0;
 }
 
