@@ -1,3 +1,5 @@
+//min no of insertions or deletion can be obtained by substracting "lps" from length of string   ans=n-lps
+
 //Recursive Approach   O(2^n)
 #include<bits/stdc++.h>
 using namespace std;
