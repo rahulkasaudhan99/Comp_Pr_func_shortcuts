@@ -111,16 +111,31 @@ class List{
         return merge(h1,h2);
     }
     //////////////////////////////////
-    bool isCycle(List* head){
+    List* isCycle(List* head){
         List* slow=head;
-        List* fast=head->next;
-        while(fast and fast->next){
+        List* fast=head;
+        while(slow and fast and fast->next){
             slow=slow->next;
             fast=fast->next->next;
-            if(slow==fast) break;
+            if(slow==fast) slow;
         }
-        return slow==fast;
+        return NULL;
     }
+    
+    ////////////
+    //remove Loop if (fast==slow)
+    //if we start fast and slow at the node say p. q starting point 
+    //will be at same distance from both head node and node p(meet pt)
+    void removeCycle(List* head){
+        List* p=isCycle(head);
+        List* q=head;
+        while(p->next!=q->next){
+            p=p->next;
+            q=q->next;
+        }
+        p->next=NULL;
+    }
+    
 };
 
 
@@ -143,7 +158,7 @@ int main(){
     head=L.mergeSort(head);
     cout<<"sorted list : ";
     L.printList(head);
-    L.isCycle(head)?
+    L.isCycle(head)!=NULL?
         cout<<"Cycle is present"<<endl : cout<<"not present"<<endl;
     return 0;    
 }
