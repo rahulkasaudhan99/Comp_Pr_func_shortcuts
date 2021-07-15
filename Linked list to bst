@@ -1,0 +1,114 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+class Tree{
+    public:
+    int data;
+    Tree* left;
+    Tree* right;
+    
+    //non parametrized constructor
+    Tree(){
+        data=0;
+        left=NULL;
+        right=NULL;
+    }
+    //parametrized constructor
+    Tree(int v){
+        this->data=v;
+        left=NULL;
+        right=NULL;
+    }
+    //preorder traversal of the tree
+};
+
+class List{
+    int data;
+    List* next;
+  public:
+    
+    //non parametrized constructor
+    List(){
+        data=0;
+        next=NULL;
+    }
+    //parametrized constructor
+    List(int v){
+        this->data=v;
+        next=NULL;
+    }
+    //push a node at back side of the list
+    List* pushBack(int v,List* head){
+        //here if tail is available no need to trvaerse again and again
+        List* newnode=new List(v);
+        if(head==NULL) return newnode;
+        List* temp=head;
+        while(temp->next!=NULL){
+            temp=temp->next;
+        }
+        //cout<<"inserting newnode value "<<v<<endl;
+        temp->next=newnode;
+        return head;
+    }
+    void printList(List* head){
+        List* temp=head;
+        while(temp!=NULL){
+            cout<<temp->data<<" -> ";
+            temp=temp->next;
+        }
+        cout<<endl;
+        return;
+    }
+    ////////////////////////////////////////////////
+    //find mid of the List
+    List* midElement(List* head){
+        List* slow=head;
+        List* fast=head;
+        List* prev=head;
+        while(fast and fast->next){
+            prev=slow;
+            slow=slow->next;
+            fast=fast->next->next;
+        }
+        //beak the link
+        if(prev!=NULL) prev->next=NULL;
+        return slow;
+    }
+    Tree* listToBst(List* head){
+        if(head==NULL) return NULL;
+        List* mid=midElement(head);
+        Tree* root=new Tree(mid->data);
+        //mid is the head of list only 1 element
+        if(mid==head) return root;
+        //left subtree
+        root->left=listToBst(head);
+        //right subtree
+        root->right=listToBst(mid->next);
+        return root;
+    }
+    void preorder(Tree* root){
+        if(root==NULL) return;
+        cout<<root->data<<" ";
+        preorder(root->left);
+        preorder(root->right);
+    }
+    
+    
+};
+
+int main(){
+    int n;
+    cin>>n;
+    List L;
+    List* head=NULL;
+    for(int i=0;i<n;i++){
+        int v;
+        cin>>v;
+        head=L.pushBack(v,head);
+    }
+    L.printList(head);
+    Tree* root=NULL;
+    root=L.listToBst(head);
+    L.preorder(root);
+    
+}
