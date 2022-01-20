@@ -33,7 +33,7 @@ void update(int *tree,int s,int e,int i,int increment,int index){
     tree[index]=min(tree[2*index],tree[2*index+1]);
     return;
 }
-query for update a range from l to r
+//query for update a range from l to r
 void updateRange(int *tree,int s,int e,int l,int r,int increment,int index){
     //if I is out of bound or range
     if(l>s || r<s) return;
