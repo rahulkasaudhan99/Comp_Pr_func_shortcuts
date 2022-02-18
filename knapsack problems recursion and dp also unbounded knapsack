@@ -46,3 +46,36 @@ int main(){
     return 0;
 }
 
+
+
+
+
+//Unbounded Knapsack (Repetition of items allowed)
+/*
+Given an integer W, arrays val[] and wt[], where val[i] and wt[i] are the values and weights of the ith item, the task is to calculate the maximum value that can be obtained using weights not exceeding W.
+Note: Each weight can be included multiple times.
+here we are allowed to use unlimited number of instances of an item.
+*/
+#include<bits/stdc++.h>
+using namespace std;
+
+int knapsackUnbounded(int *val,int *wt,int n,int W,vector<int> &dp){
+    for(int i=0;i<=W;i++){
+        for(int j=0;j<n;j++){
+            if(wt[j]<=i) dp[i]=max(dp[i],dp[i-wt[j]]+val[j]);
+        }
+    }
+    return dp[W];
+}
+
+int main(){
+    int val[]={10,30,20};
+    int wt[]={5,10,15};
+    int W=100;
+    int n=3;
+    vector<int> dp(W+1,0);
+    cout<<knapsackUnbounded(val,wt,n-1,W,dp)<<endl;
+    //output=300
+    return 0;
+}
+
