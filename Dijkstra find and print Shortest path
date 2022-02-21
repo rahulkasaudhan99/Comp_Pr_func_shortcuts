@@ -1,11 +1,17 @@
-/*  Create a vector for distances and initialize all
-    distances as infinite (INF)
-    vector<int> dist(V, INF);
-  using set stl reduce time complexity to O(ElogV) from O(V*V)
-    // Insert source itself in Set and initialize its
-    // distance as 0.
-    setds.insert(make_pair(0, src));
+/*  
+//Find dist and print shortest path
+//Dijkstra don't work on -ve wt edge for both directed and undirected graph
+//Bellman ford complexity- O(V*E)               Dijkstra- O(V*V)  BUT  O(V+Elog(V)) with min priority queue or set  
+
+//Bellman Ford works if (no -ve wt edge and undirected graph)  or (directed graph with -ve edge but no -ve cycle)
+//undirected graph with -ve wt edge will always have -ve wt cylce  if edge 1->2(-2) also there is edge  2->1(-2)
+
+//using set stl reduce time complexity to O(ElogV) from O(V*V)
+// Insert source itself in Set and initialize its
+// distance as 0.
+//setds.insert(make_pair(0, src));
 */
+
 #include<bits/stdc++.h>
 using namespace std;
 
