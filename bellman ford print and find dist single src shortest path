@@ -1,0 +1,92 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+struct edge{
+    int src,dest,wt;    
+};
+
+void bellmanFordShortestPath(vector<edge> &Edges,int src,int E,int V){
+    vector<int> parent(V,-1);
+    vector<int> parent_cost(V,0);
+    vector<int> dist(V,INT_MAX);
+    dist[0]=0;
+    bool updated;   //only to optimize(break the loop if no update in next iteration)
+    for(int i=0;i<V-1;i++){
+        updated=false;
+        //relax all edges V-1 times
+        for(int j=0;j<E;j++){
+            int u=Edges[j].src;
+            int v=Edges[j].dest;
+            int w=Edges[j].wt;
+            if(dist[u]!=INT_MAX && dist[u]+w<dist[v]){
+                dist[v]=dist[u]+w;
+                parent[v]=u;
+                parent_cost[v]=dist[v];
+                updated=true;
+            }
+        }
+        if(!updated) break; //break loop if no updation done
+    }
+    //now relax each edges once more to check -ve weight cycle
+    //(only if updation done upto V-1 th iteration)
+    for(int j=0;j<E && updated==true;j++){
+        int u=Edges[j].src;
+        int v=Edges[j].dest;
+        int w=Edges[j].wt;
+        if(dist[u]!=INT_MAX && dist[u]+w<dist[v]){
+            cout<<"graph have negative weight cycle"<<endl;
+            return;
+        }
+    }
+    //print shortest path from src to each vertices
+    for(int i=0;i<V;i++){
+        int v=i;
+        while(parent[v]!=-1){
+            cout<<v<<" <- ";
+            v=parent[v];
+        }
+        cout<<"0 dist = "<<dist[i]<<endl;
+    }
+    return;
+}
+
+
+int main(){
+    int E,V;
+    cin>>V>>E;
+    vector<edge> Edges(E);
+    int s,d,w;
+    for(int i=0;i<E;i++){
+        cin>>s>>d>>w;
+        Edges[i].src=s;
+        Edges[i].dest=d;
+        Edges[i].wt=w;        
+    }
+    int source;
+    cin>>source;
+    bellmanFordShortestPath(Edges,source,E,V);
+    return 0;
+}
+
+
+
+/*
+input
+5 8
+0 1 -1
+0 2 4
+1 2 3
+1 3 2
+1 4 2
+3 2 5
+3 1 1
+4 3 -3
+0
+output
+0 dist = 0
+1 <- 0 dist = -1
+2 <- 1 <- 0 dist = 2
+3 <- 4 <- 1 <- 0 dist = -2
+4 <- 1 <- 0 dist = 1
+
+*/
