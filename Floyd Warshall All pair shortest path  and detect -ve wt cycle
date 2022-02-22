@@ -1,0 +1,106 @@
+//Floyd Warshall All Pair Shortest path algorithm -works for -ve edge wt 
+//but not negative cycle (both directed & undirected graph)
+//Complexity O(V*V*V)
+
+#include<bits/stdc++.h>
+using namespace std;
+
+void floydWarshallShortestPath(vector<vector<int>> &graph,int V,int E){
+    int dist[V][V];
+    for(int i=0;i<V;i++)
+        for(int j=0;j<V;j++) dist[i][j]=graph[i][j];
+    
+    for(int k=0;k<V;k++){
+        for(int i=0;i<V;i++){
+            for(int j=0;j<V;j++){
+                //to avoid overflow check this if cond
+                if(dist[i][k]==INT_MAX || dist[k][j]==INT_MAX) continue;
+                dist[i][j]=min(dist[i][j],dist[i][k]+dist[k][j]);
+            }
+        }
+    }
+    //To detect -ve edge wt cycle if there is -ve dist of same vertex i to i -ve
+    for(int i=0;i<V;i++) 
+        if(dist[i][i]<0){
+            cout<<"Negative Edge wt cycle found"<<endl;
+            return;
+        }
+    //printing distance between each pair
+    for(int i=0;i<V;i++){
+        for(int j=0;j<V;j++) cout<<"Dist between "<<i<<" and "<<j<<" = "<<dist[i][j]<<endl;
+    }
+    return;
+}
+
+
+int main(){
+    int V,E;
+    cin>>V>>E;
+    vector<vector<int>> graph(V,vector<int> (V,INT_MAX));
+    for(int i=0;i<V;i++) graph[i][i]=0;
+    for(int i=0;i<E;i++){
+        int u,v,w;
+        cin>>u>>v>>w;
+        graph[u][v]=w;
+    }
+    floydWarshallShortestPath(graph,V,E);
+    
+    return 0;
+}
+
+
+
+
+
+/*
+input:
+6
+10
+0 1 1
+0 2 4
+1 2 4
+1 3 2
+1 4 7
+2 3 3
+2 4 4
+3 5 4
+4 3 3
+5 4 5
+Output:
+Dist between 0 and 0 = 0
+Dist between 0 and 1 = 1
+Dist between 0 and 2 = 4
+Dist between 0 and 3 = 3
+Dist between 0 and 4 = 8
+Dist between 0 and 5 = 7
+Dist between 1 and 0 = 2147483647
+Dist between 1 and 1 = 0
+Dist between 1 and 2 = 4
+Dist between 1 and 3 = 2
+Dist between 1 and 4 = 7
+Dist between 1 and 5 = 6
+Dist between 2 and 0 = 2147483647
+Dist between 2 and 1 = 2147483647
+Dist between 2 and 2 = 0
+Dist between 2 and 3 = 3
+Dist between 2 and 4 = 4
+Dist between 2 and 5 = 7
+Dist between 3 and 0 = 2147483647
+Dist between 3 and 1 = 2147483647
+Dist between 3 and 2 = 2147483647
+Dist between 3 and 3 = 0
+Dist between 3 and 4 = 9
+Dist between 3 and 5 = 4
+Dist between 4 and 0 = 2147483647
+Dist between 4 and 1 = 2147483647
+Dist between 4 and 2 = 2147483647
+Dist between 4 and 3 = 3
+Dist between 4 and 4 = 0
+Dist between 4 and 5 = 7
+Dist between 5 and 0 = 2147483647
+Dist between 5 and 1 = 2147483647
+Dist between 5 and 2 = 2147483647
+Dist between 5 and 3 = 8
+Dist between 5 and 4 = 5
+Dist between 5 and 5 = 0
+*/
