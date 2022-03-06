@@ -1,0 +1,20 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+bool sumConsecutiveNo(unsigned int n){
+    return (n&(n-1))&&n;  //check if no is not power of two 
+    //then it can be represented as sum of consecutive no
+}
+
+int main(){
+    int n;
+    cin>>n;
+    sumConsecutiveNo(n)?  cout<<"True"<<endl : cout<<"False"<<endl;
+    return 0;
+}
+
+
+
+output 
+15 - True
+16 - False
