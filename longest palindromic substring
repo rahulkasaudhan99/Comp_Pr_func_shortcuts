@@ -1,0 +1,56 @@
+Brute force : Resursion - checking palindrome for each substr of len 1 to n 
+Time : O(n*n*n)   n*n for substring generation and n for checking palindrome   n*n*n
+Space : O(1)
+
+DP : checking for each substr of len 1 to n  and store in dp array
+if 1st and last char of substr is same and (start + 1)  to (last-1) is true in dp i.e a palindrome  then sustr start to last is also palindrome
+Time : O(n*n)   n*n for substring generation and 1 for checking palindrome 
+Space : O(n*n)
+
+Memoization Method :
+
+Tabulation Method :
+
+#include <bits/stdc++.h>
+using namespace std;
+
+int longestPalindromicSubstring(string s){
+    int len=s.length();
+    bool dp[len][len]={false};
+    int maxLen=1;
+    int start=0;
+    //str of len=1 is always palindrome
+    for(int i=0;i<len;i++) dp[i][i]=1;
+    
+    //fill for lengths of 2 to len
+    for(int l=2;l<=len;l++){
+        for(int i=0;i<len-l+1;i++){
+            int j=i+l-1;
+            if str of two char is same then it is palindrome
+            if(i+1==j && s[i]==s[j]){
+                dp[i][j]=true;
+                maxLen=2;
+                start=i;
+            }
+            //if first and last char in substr is same and between first and last is palindrome
+            //then substring is palindrome
+            else if(s[i]==s[j] && dp[i+1][j-1]){
+                dp[i][j]=true;
+                maxLen=l;
+                start=i;
+            }
+            else dp[i][j]=false;
+        }
+    }
+    string lps=s.substr(start,maxLen);
+    cout<<lps<<endl;
+    
+    return maxLen;
+}
+
+int main() {
+	string s="forgeeksskeegfor";
+	
+	cout<<longestPalindromicSubstring(s);
+	return 0;
+}
