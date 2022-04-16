@@ -1,0 +1,97 @@
+Problem : Find Length and LCS of two strings
+Approach 
+Brute force:  Recursion - Find all posiible subseq of s1 (2^n time) and then find longest common subseq (n time)
+Time : n* 2^n
+
+Dynamic Programming : Idea is to Find lcs ending at index i in s1 and j in s2
+
+Memoization Method : Using Dp Array dp[i][j] stores longest common subsequence ending at index i in s1 and index j in s2
+Time : O(n*m)
+Space : O(n*m)
+
+#include<bits/stdc++.h>
+using namespace std;
+
+typedef long long ll;
+
+int lcs(string s1, string s2,int i,int j,vector<vector<int>> &dp){
+    //base case
+    if(i==s1.length() || j==s2.length()) return 0;
+    //if a n is already computed
+    if(dp[i][j]!=-1) return dp[i][j];
+    //recursive case compute only if dp[n] is not computed already
+    if(s1[i]==s2[j]) return dp[i][j]=1+lcs(s1,s2,i+1,j+1,dp); 
+
+    int op1=lcs(s1,s2,i+1,j,dp);
+    int op2=lcs(s1,s2,i,j+1,dp);
+
+    return dp[i][j]=max(op1,op2);
+}
+
+
+int main() {
+    string s1,s2;
+    s1="ABCD";
+    s2="ABEDG";
+    int n1,n2;
+    n1=s1.length();
+    n2=s2.length();
+    vector<vector<int>> dp(n1,vector<int> (n2,-1));  // dp vector of n1 rows of type vector<int> having n2 no of elements initialised with val=-1
+    cout<<lcs(s1,s2,0,0,dp)<<endl;
+    return 0;
+}
+
+
+Output:
+3
+
+
+
+Tabulation Method : Using Dp Array dp[i][j] stores longest common subsequence ending at index i in s1 and index j in s2
+Time : O(n*m)
+Space : O(n*m)
+
+#include<bits/stdc++.h>
+using namespace std;
+
+
+int longestCommonSubsequence(string s1,string s2){
+    int len1=s1.length();
+    int len2=s2.length();
+    int dp[len1+1][len2+1]={0}; //0 for s1 or s2 of len=0
+    for(int i=1;i<=len1;i++){
+        for(int j=1;j<=len2;j++){
+            if(s1[i-1]==s2[j-1]) dp[i][j]=1+dp[i-1][j-1];
+            else dp[i][j]=max(dp[i-1][j],dp[i][j-1]);
+        }
+    }
+    
+    string ans="";
+    int i=len1,j=len2;
+    while(i>0 && j>0){
+        if(s1[i-1]==s2[j-1]){
+            ans=s1[i-1]+ans;
+            i--;
+            j--;
+        }
+        //find larger len of two and go in the direction of larger 
+        if(dp[i-1][j]>dp[i][j-1]) i--;
+        else j--;
+    }
+    cout<<ans<<endl;
+    
+    return dp[len1][len2];
+}
+
+int main(){
+    string s1= "ABCDGH";
+    string s2= "ACBDHJI";
+    cout<<longestCommonSubsequence(s1,s2);
+    
+    return 0;
+}
+
+
+Output:
+4
+ACDH
